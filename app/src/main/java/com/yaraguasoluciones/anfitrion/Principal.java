@@ -1,7 +1,13 @@
 package com.yaraguasoluciones.anfitrion;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.pdf.PdfRenderer;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,10 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import org.ghost4j.document.PDFDocument;
-import org.ghost4j.renderer.SimpleRenderer;
-
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
@@ -50,6 +53,7 @@ public class Principal extends ActionBarActivity {
         });
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -59,9 +63,46 @@ public class Principal extends ActionBarActivity {
     */
 
         if (data!=null){
+
+            PdfRenderer renderer = null;
+            try {
+                /*
+                https://developer.android.com/reference/android/graphics/pdf/PdfRenderer.html
+                http://stackoverflow.com/questions/6715898/what-is-parcelfiledescriptor-in-android
+                 */
+
+
+                ParcelFileDescriptor parcelFileDescriptor = getContentResolver().openFileDescriptor(Uri.parse(data.getDataString()),"r");
+                renderer = new PdfRenderer(parcelFileDescriptor);
+                final int pageCount = renderer.getPageCount();
+                Bitmap mBitmap = null;
+
+                for (int i = 0; i < pageCount; i++) {
+                    PdfRenderer.Page page = renderer.openPage(i);
+
+                    // say we render for showing on the screen
+                    page.render(mBitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
+
+                    // do stuff with the bitmap
+
+                    // close the page
+                    page.close();
+                }
+
+                // close the renderer
+                renderer.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+
+
+
             /*
             http://stackoverflow.com/questions/4886042/pdf-to-image-using-java
-             */
             PDFDocument document = new PDFDocument();
 
             try {
@@ -75,6 +116,8 @@ public class Principal extends ActionBarActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+                         */
+
 
             Toast.makeText(Principal.this, data.getDataString(), Toast.LENGTH_LONG).show();
         }
