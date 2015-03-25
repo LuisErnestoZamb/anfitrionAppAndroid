@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import org.ghost4j.document.PDFDocument;
+import org.ghost4j.renderer.SimpleRenderer;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,18 +53,30 @@ public class Principal extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        PDFDocument document = new PDFDocument();
-        try {
-            document.load(new File("input.pdf"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    /*
+    http://stackoverflow.com/questions/3642928/adding-a-library-jar-to-an-eclipse-android-project
+    http:/www.stackoverflow.com/questions/8248196/how-to-add-a-library-project-to-a-android-project
+    */
 
         if (data!=null){
-            Toast.makeText(Principal.this, data.getDataString(), Toast.LENGTH_LONG).show();
+            /*
+            http://stackoverflow.com/questions/4886042/pdf-to-image-using-java
+             */
+            PDFDocument document = new PDFDocument();
 
+            try {
+                document.load(new File(data.getDataString()));
+                SimpleRenderer renderer = new SimpleRenderer();
+
+                // set resolution (in DPI)
+                renderer.setResolution(300);
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Toast.makeText(Principal.this, data.getDataString(), Toast.LENGTH_LONG).show();
         }
     }
 
