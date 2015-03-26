@@ -2,7 +2,6 @@ package com.yaraguasoluciones.anfitrion;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfRenderer;
 import android.net.Uri;
@@ -74,22 +73,26 @@ public class Principal extends ActionBarActivity {
             int currentPage = 0 ;
 
 
-
             Uri selectedImageUri = Uri.parse(data.getDataString());
 
-            //File file = new File(data.getData());
+            File file = new File(data.getDataString());
             //File file = new File(selectedImageUri.toString());
             //File file = new File("/sdcard/Download/22_Menen.pdf");
-            File file = new File("/storage/emulated/0/Download/22_Menen.pdf");
+            //File file = new File("/storage/emulated/0/Download/22_Menen.pdf");
             final String[] projection = {
                     MediaStore.Images.Media.DATA
             };
 
+            /*
             final Cursor cursor = this.getContentResolver().query(selectedImageUri, projection, null, null, null);
             cursor.moveToFirst();
             final int columnIndex = cursor.getColumnIndex(projection[0]);
             imageUrl = cursor.getString(columnIndex);
 
+
+            Publicar publicar = new Publicar();
+            publicar.enviarArchivo(this.getApplicationContext(), imageUrl);
+*/
 
             PdfRenderer renderer = null;
             try {
