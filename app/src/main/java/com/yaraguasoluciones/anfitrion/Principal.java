@@ -2,12 +2,14 @@ package com.yaraguasoluciones.anfitrion;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfRenderer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -66,6 +68,7 @@ public class Principal extends ActionBarActivity {
     http://stackoverflow.com/questions/2975197/convert-file-uri-to-file-in-android
 
     */
+        String imageUrl;
 
         if (data!=null){
             int currentPage = 0 ;
@@ -74,8 +77,19 @@ public class Principal extends ActionBarActivity {
 
             Uri selectedImageUri = Uri.parse(data.getDataString());
 
-//            File file = new File(selectedImageUri.toString());
-            File file = new File("/sdcard/Download/22_Menen.pdf");
+            //File file = new File(data.getData());
+            //File file = new File(selectedImageUri.toString());
+            //File file = new File("/sdcard/Download/22_Menen.pdf");
+            File file = new File("/storage/emulated/0/Download/22_Menen.pdf");
+            final String[] projection = {
+                    MediaStore.Images.Media.DATA
+            };
+
+            final Cursor cursor = this.getContentResolver().query(selectedImageUri, projection, null, null, null);
+            cursor.moveToFirst();
+            final int columnIndex = cursor.getColumnIndex(projection[0]);
+            imageUrl = cursor.getString(columnIndex);
+
 
             PdfRenderer renderer = null;
             try {
@@ -86,6 +100,7 @@ public class Principal extends ActionBarActivity {
                 https://github.com/digipost/Android-Pdf
                  */
 
+                //renderer = new PdfRenderer(ParcelFileDescriptor.open(new File(imageUrl), ParcelFileDescriptor.MODE_READ_ONLY));
                 renderer = new PdfRenderer(ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY));
             } catch (IOException e) {
                 e.printStackTrace();
