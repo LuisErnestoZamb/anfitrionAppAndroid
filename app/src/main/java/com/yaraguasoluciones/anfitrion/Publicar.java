@@ -16,33 +16,38 @@ import java.io.File;
 public class Publicar {
 
     public void obtenerCodigo(final Context context, Intent data) {
-        Ion.with(context)
-                .load("http://inscripciones.cnpven.org/documentos/new")
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        // do stuff with the result or error
+
+
+        try{
+            Ion.with(context)
+                    .load("http://inscripciones.cnpven.org/archivos/new")
+                    .asJsonObject().setCallback(new FutureCallback<JsonObject>() {
+                @Override
+                public void onCompleted(Exception e, JsonObject result) {
+                    if (e!=null){
+                        Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+                    }else if (result!=null){
                         Toast.makeText(context, result.toString(), Toast.LENGTH_LONG).show();
                     }
-                });
+                }
+            });
+
+        }catch (Exception e){
+            Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+        }
     }
 
-    public void enviarArchivo(final Context context, File data) {
+    public void enviarArchivo(final Context context, File nombreArchivo) {
+
+        String url = "http://inscripciones.cnpven.org/archivos";
+
 
         Ion.with(context)
-                .load("http://inscripciones.cnpven.org/documentos/new")
+                .load(url)
                 //.uploadProgressBar(uploadProgressBar)
-                .setMultipartParameter("afiliado_id", "1")
-                .setMultipartParameter("tipodocumento_id", "1")
-                .setMultipartFile("filename.jpg", data)
-                .asJsonObject().setCallback(new FutureCallback<JsonObject>() {
-            @Override
-            public void onCompleted(Exception e, JsonObject result) {
-                Toast.makeText(context, result.toString(), Toast.LENGTH_LONG).show();
-
-            }
-        });
+                .setMultipartParameter("archivo[tipodocumento_id]", "1")
+                .setMultipartParameter("archivo[afiliado_id]", "1")
+                .setMultipartFile("archivo[ruta]", "image/jpeg", nombreArchivo)
+                .asJsonObject();
     }
-
 }

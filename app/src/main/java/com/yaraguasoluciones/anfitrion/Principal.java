@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.pdf.PdfRenderer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,9 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Random;
@@ -89,7 +86,7 @@ public class Principal extends ActionBarActivity {
 
     private File guardar(Bitmap bm){
         String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/req_images");
+        File myDir = new File(root + "/Anfitrion");
         myDir.mkdirs();
         Random generator = new Random();
         int n = 10000;
@@ -114,13 +111,7 @@ public class Principal extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && data!=null) {
-
-
-            /*
-            http://stackoverflow.com/questions/5570343/android-compatible-library-for-creating-image-from-pdf-file
-             */
-            //String ruta = buscarRuta(data);
+        if (resultCode == RESULT_OK) {
 
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
@@ -131,9 +122,6 @@ public class Principal extends ActionBarActivity {
 
 
             Publicar publicar = new Publicar();
-
-            Toast.makeText(Principal.this, data.getType(), Toast.LENGTH_LONG).show();
-
 
             //publicar.obtenerCodigo(this.getApplicationContext(), data);
 
@@ -146,49 +134,6 @@ public class Principal extends ActionBarActivity {
         }
 
 
-    /*
-    http://stackoverflow.com/questions/3642928/adding-a-library-jar-to-an-eclipse-android-project
-    http:/www.stackoverflow.com/questions/8248196/how-to-add-a-library-project-to-a-android-project
-
-    Revisar detalle en versiones de android:
-    http://hmkcode.com/android-display-selected-image-and-its-real-path/
-
-    http://stackoverflow.com/questions/10288385/android-image-picker-wrong-image
-    http://stackoverflow.com/questions/2975197/convert-file-uri-to-file-in-android
-
-    */
-        String imageUrl;
-
-        if (data!=null){
-            int currentPage = 0 ;
-
-
-
-            PdfRenderer renderer = null;
-
-
-
-
-            /*
-            http://stackoverflow.com/questions/4886042/pdf-to-image-using-java
-            PDFDocument document = new PDFDocument();
-
-            try {
-                document.load(new File(data.getDataString()));
-                SimpleRenderer renderer = new SimpleRenderer();
-
-                // set resolution (in DPI)
-                renderer.setResolution(300);
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            */
-
-
-            Toast.makeText(Principal.this, data.getDataString(), Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override

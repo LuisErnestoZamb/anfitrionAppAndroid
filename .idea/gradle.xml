@@ -9,7 +9,6 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/ghost4j-0.5.1" />
           </set>
         </option>
       </GradleProjectSettings>
