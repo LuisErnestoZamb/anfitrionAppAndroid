@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,6 +38,8 @@ public class Principal extends ActionBarActivity {
         envio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent2 = new Intent(Principal.this, Segundo.class);
+                startActivity(intent2);
                 // start the image capture Intent
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
@@ -163,8 +166,6 @@ public class Principal extends ActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-
-
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             ImageView mostrar = (ImageView)findViewById(R.id.foto);
@@ -172,17 +173,26 @@ public class Principal extends ActionBarActivity {
             File archivo = guardar(imageBitmap);
 
 
+            String s = extras.getString("resultado");
+
 
             Publicar publicar = new Publicar();
 
             //publicar.obtenerCodigo(this.getApplicationContext(), data);
 
-            publicar.enviarArchivo(this.getApplicationContext(), archivo);
+            //publicar.enviarArchivo(this.getApplicationContext(), archivo);
 
+            if (s!=null){
+                Toast.makeText(this.getApplicationContext(), "Resultado" + s , Toast.LENGTH_LONG).show();
+            }
+        }
+        if (requestCode==1234 && resultCode==RESULT_OK) {
 
+            String res = data.getExtras().getString("resultado");
 
-
-
+            if (res!= null){
+                Toast.makeText(this.getApplicationContext(), "Resultado" + res , Toast.LENGTH_LONG).show();
+            }
         }
 
 
