@@ -1,2 +1,0 @@
-configurations.create("default")
-artifacts.add("default", file('ghost4j-0.5.1.jar'))

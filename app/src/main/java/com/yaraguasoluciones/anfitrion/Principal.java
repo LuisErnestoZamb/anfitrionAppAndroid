@@ -1,33 +1,48 @@
 package com.yaraguasoluciones.anfitrion;
 
-import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfRenderer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
+import java.io.FileOutputStream;
+import java.util.Random;
 
 
 public class Principal extends ActionBarActivity {
 
-    private int YOUR_RESULT_CODE = 0;
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
+    private Uri fileUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
+        Button envio = (Button)findViewById(R.id.enviar);
+        envio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                // start the image capture Intent
+                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+
+            }
+        });
     }
 
 
@@ -38,24 +53,99 @@ public class Principal extends ActionBarActivity {
         return true;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Button envio = (Button)findViewById(R.id.enviar);
-        envio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("application/pdf");
-                startActivityForResult(intent, YOUR_RESULT_CODE);
+
+    public String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
             }
-        });
+        }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private String buscarRuta(Intent data){
+
+        String realPath;
+        // SDK < API11
+        if (Build.VERSION.SDK_INT < 11)
+            realPath = RealPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
+
+            // SDK >= 11 && SDK < 19
+        else if (Build.VERSION.SDK_INT < 19)
+            realPath = RealPathUtil.getRealPathFromURI_API11to18(this, data.getData());
+
+            // SDK > 19 (Android 4.4)
+        else
+            realPath = RealPathUtil.getRealPathFromURI_API19(this, data.getData());
+        return realPath;
+    }
+
+
+    private File guardar(Bitmap bm){
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/req_images");
+        myDir.mkdirs();
+        Random generator = new Random();
+        int n = 10000;
+        n = generator.nextInt(n);
+        String fname = "Image-" + n + ".jpg";
+        File file = new File(myDir, fname);
+
+        if (file.exists())
+            file.delete();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            bm.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && data!=null) {
+
+
+            /*
+            http://stackoverflow.com/questions/5570343/android-compatible-library-for-creating-image-from-pdf-file
+             */
+            //String ruta = buscarRuta(data);
+
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            ImageView mostrar = (ImageView)findViewById(R.id.foto);
+            mostrar.setImageBitmap(imageBitmap);
+            File archivo = guardar(imageBitmap);
+
+
+
+            Publicar publicar = new Publicar();
+
+            Toast.makeText(Principal.this, data.getType(), Toast.LENGTH_LONG).show();
+
+
+            //publicar.obtenerCodigo(this.getApplicationContext(), data);
+
+            publicar.enviarArchivo(this.getApplicationContext(), archivo);
+
+
+
+
+
+        }
+
+
     /*
     http://stackoverflow.com/questions/3642928/adding-a-library-jar-to-an-eclipse-android-project
     http:/www.stackoverflow.com/questions/8248196/how-to-add-a-library-project-to-a-android-project
@@ -73,68 +163,9 @@ public class Principal extends ActionBarActivity {
             int currentPage = 0 ;
 
 
-            Uri selectedImageUri = Uri.parse(data.getDataString());
-
-            File file = new File(data.getDataString());
-            //File file = new File(selectedImageUri.toString());
-            //File file = new File("/sdcard/Download/22_Menen.pdf");
-            //File file = new File("/storage/emulated/0/Download/22_Menen.pdf");
-            final String[] projection = {
-                    MediaStore.Images.Media.DATA
-            };
-
-            /*
-            final Cursor cursor = this.getContentResolver().query(selectedImageUri, projection, null, null, null);
-            cursor.moveToFirst();
-            final int columnIndex = cursor.getColumnIndex(projection[0]);
-            imageUrl = cursor.getString(columnIndex);
-
-
-            Publicar publicar = new Publicar();
-            publicar.enviarArchivo(this.getApplicationContext(), imageUrl);
-*/
 
             PdfRenderer renderer = null;
-            try {
 
-                /*
-                https://developer.android.com/reference/android/graphics/pdf/PdfRenderer.html
-                http://stackoverflow.com/questions/6715898/what-is-parcelfiledescriptor-in-android
-                https://github.com/digipost/Android-Pdf
-                 */
-
-                //renderer = new PdfRenderer(ParcelFileDescriptor.open(new File(imageUrl), ParcelFileDescriptor.MODE_READ_ONLY));
-                renderer = new PdfRenderer(ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-            if(currentPage > renderer.getPageCount()){
-                currentPage = renderer.getPageCount()-1;
-            }
-            //renderer.openPage(currentPage).render(bitmap, new Rect(0, 0, 500, 500), new Matrix(), PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
-
-
-            final int pageCount = renderer.getPageCount();
-            Bitmap mBitmap = null;
-
-            for (int i = 0; i < pageCount; i++) {
-                PdfRenderer.Page page = renderer.openPage(i);
-
-                // say we render for showing on the screen
-                //imageView = (ImageView) findViewById(R.id.imageView);
-                Bitmap bitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_4444);
-                page.render(mBitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
-
-                // do stuff with the bitmap
-
-                // close the page
-                page.close();
-            }
-
-            // close the renderer
-            renderer.close();
 
 
 
@@ -153,7 +184,7 @@ public class Principal extends ActionBarActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-                         */
+            */
 
 
             Toast.makeText(Principal.this, data.getDataString(), Toast.LENGTH_LONG).show();
