@@ -41,6 +41,7 @@ public class Publicar {
 
         String url = "http://inscripciones.cnpven.org/archivos";
 
+        Toast.makeText(context, nombreArchivo.getAbsolutePath().toString(), Toast.LENGTH_LONG).show();
 
         Ion.with(context)
                 .load(url)
