@@ -61,7 +61,7 @@ public class Segundo extends ActionBarActivity {
                 Publicar publicar = new Publicar();
                 if (contexto!=null){
                     cedula = (EditText)findViewById(R.id.cedula);
-                    publicar.obtenerCodigo(contexto, archivo, cedula.toString(), "V");
+                    publicar.obtenerCodigo(contexto, archivo, cedula.getText().toString(), "V", "1");
                 }
             }
         });
@@ -77,9 +77,6 @@ public class Segundo extends ActionBarActivity {
             ImageView mostrar = (ImageView)findViewById(R.id.fotoTomada);
             mostrar.setImageBitmap(imageBitmap);
             archivo = guardar(imageBitmap);
-
-            //publicar.enviarArchivo(this.getApplicationContext(), archivo);
-
         }else{
             this.finish();
         }
