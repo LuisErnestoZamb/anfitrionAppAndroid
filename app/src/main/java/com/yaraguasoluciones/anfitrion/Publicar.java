@@ -1,7 +1,6 @@
 package com.yaraguasoluciones.anfitrion;
 
 import android.content.Context;
-import android.content.Intent;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
@@ -15,22 +14,23 @@ import java.io.File;
  */
 public class Publicar {
 
-    public void obtenerCodigo(final Context context, Intent data) {
-/*
-
-http://0.0.0.0:3000/archivos/mostrarafiliado.json?nac=V&cedula=1
-
- */
-
+    public void obtenerCodigo(final Context context, final File nombreArchivo, final String cedula, final String nac) {
+    /*
+    http://0.0.0.0:3000/archivos/mostrarafiliado.json?nac=V&cedula=1
+    */
         try{
             Ion.with(context)
-                    .load("http://inscripciones.cnpven.org/archivos/new")
+                    .load("http://inscripciones.cnpven.org/archivos/mostrarafiliado.json")
+                    .setMultipartParameter("nac", "V")
+                    .setMultipartParameter("cedula", cedula)
                     .asJsonObject().setCallback(new FutureCallback<JsonObject>() {
                 @Override
                 public void onCompleted(Exception e, JsonObject result) {
                     if (e!=null){
                         Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
                     }else if (result!=null){
+                        String afiliado_id = "";
+                        enviarArchivo(context, nombreArchivo, afiliado_id, nac);
                         Toast.makeText(context, result.toString(), Toast.LENGTH_LONG).show();
                     }
                 }
@@ -41,7 +41,7 @@ http://0.0.0.0:3000/archivos/mostrarafiliado.json?nac=V&cedula=1
         }
     }
 
-    public void enviarArchivo(final Context context, File nombreArchivo) {
+    public void enviarArchivo(final Context context, File nombreArchivo, String afiliado_id, String tipodocumento_id) {
 
         String url = "http://inscripciones.cnpven.org/archivos";
 
@@ -50,8 +50,8 @@ http://0.0.0.0:3000/archivos/mostrarafiliado.json?nac=V&cedula=1
         Ion.with(context)
                 .load(url)
                 //.uploadProgressBar(uploadProgressBar)
-                .setMultipartParameter("archivo[tipodocumento_id]", "1")
-                .setMultipartParameter("archivo[afiliado_id]", "1")
+                .setMultipartParameter("archivo[tipodocumento_id]", tipodocumento_id)
+                .setMultipartParameter("archivo[afiliado_id]", afiliado_id)
                 .setMultipartFile("archivo[ruta]", "image/jpeg", nombreArchivo)
                 .asJsonObject();
     }

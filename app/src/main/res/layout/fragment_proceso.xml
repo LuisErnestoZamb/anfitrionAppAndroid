@@ -8,21 +8,29 @@
         android:layout_height="wrap_content">
 
         <ExpandableListView
-            android:layout_width="123dp"
+            android:layout_width="70dp"
             android:layout_height="53dp"
-            android:id="@+id/expandableListView"
-            tools:listitem="@android:layout/simple_expandable_list_item_1" />
+            android:id="@+id/nacLista"
+            tools:listitem="@android:layout/simple_expandable_list_item_1"
+            android:clickable="true" />
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="numberSigned"
             android:ems="10"
-            android:id="@+id/editText2"
+            android:id="@+id/cedula"
             android:layout_weight="1" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Buscar"
+            android:id="@+id/Enviar" />
+
     </LinearLayout>
-        <ImageView
+
+    <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/fotoTomada"

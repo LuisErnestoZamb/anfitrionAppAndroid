@@ -1,5 +1,6 @@
 package com.yaraguasoluciones.anfitrion;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -8,8 +9,10 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,6 +20,10 @@ import java.util.Random;
 
 
 public class Segundo extends ActionBarActivity {
+
+    private Context contexto = null;
+    private File archivo = null;
+    private EditText cedula = null;
 
     private File guardar(Bitmap bm){
         String root = Environment.getExternalStorageDirectory().toString();
@@ -47,26 +54,33 @@ public class Segundo extends ActionBarActivity {
         setContentView(R.layout.activity_segundo);
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, 1);
+        Button envio = (Button)findViewById(R.id.buscar);
+        envio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Publicar publicar = new Publicar();
+                if (contexto!=null){
+                    publicar.obtenerCodigo(contexto, archivo, cedula.toString());
+                }
+            }
+        });
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        contexto = this.getApplicationContext();
         if (resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             ImageView mostrar = (ImageView)findViewById(R.id.fotoTomada);
             mostrar.setImageBitmap(imageBitmap);
-            File archivo = guardar(imageBitmap);
+            archivo = guardar(imageBitmap);
+            cedula = (EditText)findViewById(R.id.cedula);
 
-            Publicar publicar = new Publicar();
 
-            //publicar.obtenerCodigo(this.getApplicationContext(), data);
 
             //publicar.enviarArchivo(this.getApplicationContext(), archivo);
-
-            Toast.makeText(this.getApplicationContext(), "Cabilla!", Toast.LENGTH_LONG).show();
 
         }else{
             this.finish();
