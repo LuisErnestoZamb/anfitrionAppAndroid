@@ -1,33 +1,52 @@
 package com.yaraguasoluciones.anfitrion;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Random;
 
 
 public class Segundo extends ActionBarActivity {
 
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
+    private File guardar(Bitmap bm){
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/Anfitrion");
+        myDir.mkdirs();
+        Random generator = new Random();
+        int n = 10000;
+        n = generator.nextInt(n);
+        String fname = "Image-" + n + ".jpg";
+        File file = new File(myDir, fname);
+
+        if (file.exists())
+            file.delete();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            bm.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_segundo);
-
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-
-//        Intent intent = new Intent(this, Principal.class);
-
-
-//        intent.putExtra("resultado","valor");
-
-//        setResult(1234, intent);
-//        startActivityForResult(intent, 1234);
-//        this.finish();
+        startActivityForResult(intent, 1);
     }
 
 
@@ -35,7 +54,22 @@ public class Segundo extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            ImageView mostrar = (ImageView)findViewById(R.id.fotoTomada);
+            mostrar.setImageBitmap(imageBitmap);
+            File archivo = guardar(imageBitmap);
 
+            Publicar publicar = new Publicar();
+
+            //publicar.obtenerCodigo(this.getApplicationContext(), data);
+
+            //publicar.enviarArchivo(this.getApplicationContext(), archivo);
+
+            Toast.makeText(this.getApplicationContext(), "Cabilla!", Toast.LENGTH_LONG).show();
+
+        }else{
+            this.finish();
         }
     }
 
