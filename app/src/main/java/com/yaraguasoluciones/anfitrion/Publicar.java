@@ -16,7 +16,11 @@ import java.io.File;
 public class Publicar {
 
     public void obtenerCodigo(final Context context, Intent data) {
+/*
 
+http://0.0.0.0:3000/archivos/mostrarafiliado.json?nac=V&cedula=1
+
+ */
 
         try{
             Ion.with(context)
