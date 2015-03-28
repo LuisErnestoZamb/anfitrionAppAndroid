@@ -1,5 +1,8 @@
 package com.yaraguasoluciones.anfitrion;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -38,11 +41,14 @@ public class Principal extends ActionBarActivity {
         envio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent2 = new Intent(Principal.this, Segundo.class);
-                startActivity(intent2);
+                Intent intent = new Intent(Principal.this, Segundo.class);
+                startActivity(intent);
                 // start the image capture Intent
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+
+
+
+                //addFragment();
+
                 //dispatchTakePictureIntent();
 
             }
@@ -173,7 +179,7 @@ public class Principal extends ActionBarActivity {
             File archivo = guardar(imageBitmap);
 
 
-            String s = extras.getString("resultado");
+            //addFragment();
 
 
             Publicar publicar = new Publicar();
@@ -182,9 +188,6 @@ public class Principal extends ActionBarActivity {
 
             //publicar.enviarArchivo(this.getApplicationContext(), archivo);
 
-            if (s!=null){
-                Toast.makeText(this.getApplicationContext(), "Resultado" + s , Toast.LENGTH_LONG).show();
-            }
         }
         if (requestCode==1234 && resultCode==RESULT_OK) {
 
@@ -196,6 +199,17 @@ public class Principal extends ActionBarActivity {
         }
 
 
+    }
+
+
+
+
+    private void crearElFragmento(Fragment fragment){
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        // Agrega el fragmento al contenido de todo el android
+        //transaction.add(R.id.nuevoFragmento, new Proceso(), "Publicando");
+        transaction.commit();
     }
 
     @Override

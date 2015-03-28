@@ -2,6 +2,7 @@ package com.yaraguasoluciones.anfitrion;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,20 +10,34 @@ import android.view.MenuItem;
 
 public class Segundo extends ActionBarActivity {
 
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_segundo);
-        Intent intent = new Intent(this, Principal.class);
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+
+//        Intent intent = new Intent(this, Principal.class);
 
 
-        intent.putExtra("resultado","valor");
+//        intent.putExtra("resultado","valor");
 
-        setResult(1234, intent);
+//        setResult(1234, intent);
 //        startActivityForResult(intent, 1234);
-        this.finish();
+//        this.finish();
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
