@@ -27,7 +27,5 @@
             android:layout_height="match_parent"
             android:id="@+id/fotoTomada"
             android:layout_gravity="center_horizontal|bottom"
-            android:contentDescription="No foto"
-            android:maxWidth="@android:dimen/dialog_min_width_minor"
-            android:maxHeight="@android:dimen/dialog_min_width_minor" />
+            android:contentDescription="No foto" />
 </LinearLayout>
