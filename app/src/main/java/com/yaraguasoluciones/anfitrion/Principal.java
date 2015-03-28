@@ -15,7 +15,7 @@ public class Principal extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
-        Button envio = (Button)findViewById(R.id.enviar);
+        Button envio = (Button)findViewById(R.id.tomarFoto);
         envio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

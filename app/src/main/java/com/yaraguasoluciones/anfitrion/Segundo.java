@@ -54,13 +54,14 @@ public class Segundo extends ActionBarActivity {
         setContentView(R.layout.activity_segundo);
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, 1);
-        Button envio = (Button)findViewById(R.id.buscar);
+        Button envio = (Button)findViewById(R.id.enviar);
         envio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Publicar publicar = new Publicar();
                 if (contexto!=null){
-                    publicar.obtenerCodigo(contexto, archivo, cedula.toString());
+                    cedula = (EditText)findViewById(R.id.cedula);
+                    publicar.obtenerCodigo(contexto, archivo, cedula.toString(), "V");
                 }
             }
         });
@@ -76,9 +77,6 @@ public class Segundo extends ActionBarActivity {
             ImageView mostrar = (ImageView)findViewById(R.id.fotoTomada);
             mostrar.setImageBitmap(imageBitmap);
             archivo = guardar(imageBitmap);
-            cedula = (EditText)findViewById(R.id.cedula);
-
-
 
             //publicar.enviarArchivo(this.getApplicationContext(), archivo);
 

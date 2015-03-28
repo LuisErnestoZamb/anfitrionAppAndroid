@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tomar foto"
-        android:id="@+id/enviar"
+        android:id="@+id/tomarFoto"
         android:height="100dp"
         android:textSize="16dp"
         android:width="200dp"

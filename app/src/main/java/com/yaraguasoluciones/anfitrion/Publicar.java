@@ -16,7 +16,7 @@ public class Publicar {
 
     public void obtenerCodigo(final Context context, final File nombreArchivo, final String cedula, final String nac) {
     /*
-    http://0.0.0.0:3000/archivos/mostrarafiliado.json?nac=V&cedula=1
+    http://0.0.0.0:3000/archivos/mostrarafiliado.json?nac=V&cedula=274015
     */
         try{
             Ion.with(context)
