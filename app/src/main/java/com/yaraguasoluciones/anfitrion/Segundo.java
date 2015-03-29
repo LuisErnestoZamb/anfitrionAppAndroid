@@ -1,6 +1,8 @@
 package com.yaraguasoluciones.anfitrion;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -52,16 +54,47 @@ public class Segundo extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_segundo);
+
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, 1);
+
         Button envio = (Button)findViewById(R.id.enviar);
         envio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Publicar publicar = new Publicar();
+
                 if (contexto!=null){
-                    cedula = (EditText)findViewById(R.id.cedula);
-                    publicar.obtenerCodigo(contexto, archivo, cedula.getText().toString(), "V", "1");
+
+                    AlertDialog dialog = new AlertDialog.Builder(v.getContext())
+                            .setTitle("Enviar imagen")
+                            .setMessage("Desea continuar con el envío.")
+                            .setCancelable(true)
+                            .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (dialog!=null){
+                                        Publicar publicar = new Publicar();
+                                        cedula = (EditText)findViewById(R.id.cedula);
+                                        publicar.obtenerCodigo(contexto, archivo, cedula.getText().toString(), "V", "1");
+                                        dialog.dismiss();
+                                        dialog = null;
+                                        cedula.setText("");
+
+                                        //this.finish();
+                                    }
+                                }
+                            })
+                            .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (dialog != null) {
+                                        dialog.cancel();
+                                        dialog = null;
+                                    }
+                                }
+                            })
+                            .create();
+                    dialog.show();
                 }
             }
         });
