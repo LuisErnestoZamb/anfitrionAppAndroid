@@ -84,7 +84,7 @@ public class Segundo extends ActionBarActivity {
                                     }
                                 }
                             })
-                            .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                            .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     if (dialog != null) {
