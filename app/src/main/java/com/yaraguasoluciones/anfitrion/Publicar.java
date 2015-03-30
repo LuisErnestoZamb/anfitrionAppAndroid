@@ -16,7 +16,13 @@ import java.io.File;
  */
 public class Publicar {
 
-    private boolean verificarConexion(Context context){
+    Context context = null;
+
+    public Publicar(Context context){
+        this.context = context;
+    }
+
+    private boolean verificarConexion(){
         ConnectivityManager cm =
                 (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -29,7 +35,7 @@ public class Publicar {
 
 
 
-    public void obtenerCodigo(final Context context, final File nombreArchivo, final String cedula, final String nac,final String optionTipo) {
+    public void obtenerCodigo(final File nombreArchivo, final String cedula, final String nac,final String optionTipo) {
     /*
     http://0.0.0.0:3000/archivos/mostrarafiliado.json?nac=V&cedula=274015
     */
@@ -43,12 +49,10 @@ public class Publicar {
                 public void onCompleted(Exception e, JsonObject result) {
                     if (e!=null){
                         Toast.makeText(context, "Cédula incorrecta", Toast.LENGTH_LONG).show();
-
-
                     }else if (result!=null){
                         Toast.makeText(context, "Imagen adjuntada a: " + result.get("afiliado_ap1") + ", " + result.get("afiliado_no1"), Toast.LENGTH_LONG).show();
                         String afiliado_id = result.get("id").toString();
-                        enviarArchivo(context, nombreArchivo, afiliado_id, optionTipo);
+                        enviarArchivo(nombreArchivo, afiliado_id, optionTipo);
                     }
                 }
             });
@@ -57,7 +61,7 @@ public class Publicar {
         }
     }
 
-    public void enviarArchivo(Context context, File nombreArchivo, String afiliado_id, String tipodocumento_id) {
+    public void enviarArchivo(final File nombreArchivo, String afiliado_id, String tipodocumento_id) {
 
         String url = "http://inscripciones.cnpven.org/archivos";
 
@@ -66,6 +70,15 @@ public class Publicar {
                 .setMultipartParameter("archivo[tipodocumento_id]", tipodocumento_id)
                 .setMultipartParameter("archivo[afiliado_id]", afiliado_id)
                 .setMultipartFile("archivo[ruta]", "image/jpeg", nombreArchivo)
-                .asJsonObject();
+                .asJsonObject().setCallback(new FutureCallback<JsonObject>() {
+            @Override
+            public void onCompleted(Exception e, JsonObject result) {
+                if (e!=null){
+                    Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+                }else if (result!=null){
+                    Toast.makeText(context, result.toString(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 }

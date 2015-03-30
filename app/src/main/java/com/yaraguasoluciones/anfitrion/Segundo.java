@@ -23,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.Random;
 
 
@@ -37,28 +36,6 @@ public class Segundo extends ActionBarActivity {
     private SharedPreferences mPrefs;
     private String mCurViewMode;
 
-    private File guardar(Bitmap bm){
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/Anfitrion");
-        myDir.mkdirs();
-        Random generator = new Random();
-        int n = 10000;
-        n = generator.nextInt(n);
-        String fname = "Image-" + n + ".jpg";
-        File file = new File(myDir, fname);
-
-        if (file.exists())
-            file.delete();
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            bm.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return file;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,13 +44,6 @@ public class Segundo extends ActionBarActivity {
 
         takePhoto();
         mPrefs = getSharedPreferences("rutaImagen", MODE_PRIVATE);
-
-/*
-
-        intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, 1);
- */
-
 
 
 
@@ -92,9 +62,9 @@ public class Segundo extends ActionBarActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     if (dialog!=null){
-                                        Publicar publicar = new Publicar();
+                                        Publicar publicar = new Publicar(contexto);
                                         cedula = (EditText)findViewById(R.id.cedula);
-                                        publicar.obtenerCodigo(contexto, archivo, cedula.getText().toString(), "V", "1");
+                                        publicar.obtenerCodigo(archivo, cedula.getText().toString(), "V", "1");
                                         dialog.dismiss();
                                         dialog = null;
                                         cedula.setText("");
@@ -138,19 +108,18 @@ public class Segundo extends ActionBarActivity {
         String fname = "Image-" + n + ".jpg";
 
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        File photo = new File(myDir, fname);
+        archivo = new File(myDir, fname);
         intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(photo));
-        imageUri = Uri.fromFile(photo);
+                Uri.fromFile(archivo));
+        imageUri = Uri.fromFile(archivo);
         startActivityForResult(intent, TAKE_PICTURE);
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         contexto = this.getApplicationContext();
-
-
 
         if (resultCode == Activity.RESULT_OK) {
             Uri selectedImage = imageUri;
@@ -207,24 +176,10 @@ public class Segundo extends ActionBarActivity {
 
             */
 
-        }
-
-
-
-
-
-
-        if (resultCode == RESULT_OK) {
-            //Bundle extras = data.getExtras();
-            //Bitmap imageBitmap = (Bitmap) extras.get("data");
-            //ImageView mostrar = (ImageView)findViewById(R.id.fotoTomada);
-            //mostrar.setImageBitmap(imageBitmap);
-            //archivo = guardar(imageBitmap);
         }else{
             this.finish();
         }
 
-        super.onActivityResult(requestCode, resultCode, data);
 
     }
 
