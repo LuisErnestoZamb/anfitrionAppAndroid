@@ -31,41 +31,96 @@ public class Segundo extends ActionBarActivity {
     private Context contexto = null;
     private File archivo = null;
     private EditText cedula = null;
-    private Intent intent = null;
-
-    private SharedPreferences mPrefs;
-    private String mCurViewMode;
-
     private static int TAKE_PICTURE = 1;
     private Uri imageUri;
+
+    public static final String PREFS_NAME = "rutaImagen";
+
+
+    private void guardarEstado(String pathFile, boolean camara) {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("rutaImagen", pathFile);
+        editor.putBoolean("valorCamara", camara);
+        // Commit the edits!
+        editor.commit();
+    }
+
+    private String valorAlmacenado() {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        return settings.getString("rutaImagen", null);
+    }
+
+    private boolean setCamaraActivada() {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        return settings.getBoolean("valorCamara", true);
+    }
+
+    private boolean setCamaraDesactivar() {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        return settings.getBoolean("valorCamara", false);
+    }
+
+
+    private boolean camaraActiva() {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        return settings.getBoolean("valorCamara", false);
+    }
+
+    private void cargarImagen() {
+        Uri selectedImage = imageUri;
+        getContentResolver().notifyChange(selectedImage, null);
+        ImageView imageView = (ImageView) findViewById(R.id.fotoTomada);
+        ContentResolver cr = getContentResolver();
+        Bitmap bitmap;
+        try {
+            bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
+
+            // Acá reducimos el tamaño de la imagen.
+            Bitmap reducido = bitmap.createScaledBitmap(bitmap, bitmap.getWidth() / 2, bitmap.getHeight() / 2, false);
+            imageView.setImageBitmap(reducido);
+            Toast.makeText(this, selectedImage.toString(), Toast.LENGTH_LONG).show();
+
+        } catch (Exception e) {
+            Log.e("Camera", e.toString());
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_segundo);
+        String rutaArchivo = valorAlmacenado();
 
-        takePhoto();
-        mPrefs = getSharedPreferences("rutaImagen", MODE_PRIVATE);
-
-        Button cancelar = (Button)findViewById(R.id.cambiarFoto);
+        if (rutaArchivo != null) {
+            archivo = new File(rutaArchivo);
+            imageUri = Uri.fromFile(archivo);
+            cargarImagen();
+            setCamaraActivada();
+        }
+        if (!camaraActiva()) {
+            takePhoto();
+        }
+        Button cancelar = (Button) findViewById(R.id.cambiarFoto);
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cedula = (EditText)findViewById(R.id.cedula);
+                cedula = (EditText) findViewById(R.id.cedula);
                 cedula.setText("");
-                ImageView mostrar = (ImageView)findViewById(R.id.fotoTomada);
+                ImageView mostrar = (ImageView) findViewById(R.id.fotoTomada);
                 mostrar.setImageBitmap(null);
-                mCurViewMode = mPrefs.getString("rutaImagen", null);
+                guardarEstado(null, true);
                 takePhoto();
             }
         });
 
-        Button envio = (Button)findViewById(R.id.enviar);
+
+        Button envio = (Button) findViewById(R.id.enviar);
         envio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (contexto != null) {
 
-                if (contexto!=null){
 
                     AlertDialog dialog = new AlertDialog.Builder(v.getContext())
                             .setTitle("Enviar imagen")
@@ -74,18 +129,17 @@ public class Segundo extends ActionBarActivity {
                             .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    if (dialog!=null){
+                                    if (dialog != null) {
                                         Publicar publicar = new Publicar(contexto);
-                                        cedula = (EditText)findViewById(R.id.cedula);
+                                        cedula = (EditText) findViewById(R.id.cedula);
                                         publicar.obtenerCodigo(archivo, cedula.getText().toString(), "V", "1");
                                         dialog.dismiss();
                                         dialog = null;
                                         cedula.setText("");
-                                        ImageView mostrar = (ImageView)findViewById(R.id.fotoTomada);
+                                        ImageView mostrar = (ImageView) findViewById(R.id.fotoTomada);
                                         mostrar.setImageBitmap(null);
+                                        guardarEstado(null, false);
                                         finish();
-                                        mCurViewMode = mPrefs.getString("rutaImagen", null);
-
                                     }
                                 }
                             })
@@ -100,10 +154,14 @@ public class Segundo extends ActionBarActivity {
                             })
                             .create();
                     dialog.show();
+
                 }
             }
         });
+
     }
+
+
 
     public void takePhoto() {
         // Generando la ruta de guardado
@@ -131,26 +189,8 @@ public class Segundo extends ActionBarActivity {
         contexto = this.getApplicationContext();
 
         if (resultCode == Activity.RESULT_OK) {
-            Uri selectedImage = imageUri;
-            getContentResolver().notifyChange(selectedImage, null);
-            ImageView imageView = (ImageView) findViewById(R.id.fotoTomada);
-            ContentResolver cr = getContentResolver();
-            Bitmap bitmap;
-            try {
-                bitmap = android.provider.MediaStore.Images.Media
-                        .getBitmap(cr, selectedImage);
-
-
-                Bitmap reducido = bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/2, bitmap.getHeight()/2, false);
-
-                imageView.setImageBitmap(reducido);
-                Toast.makeText(this, selectedImage.toString(),
-                        Toast.LENGTH_LONG).show();
-
-            } catch (Exception e) {
-                Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT).show();
-                Log.e("Camera", e.toString());
-            }
+            cargarImagen();
+            guardarEstado(archivo.getAbsolutePath(), true);
         }else{
             this.finish();
         }

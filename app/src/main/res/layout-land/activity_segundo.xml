@@ -16,4 +16,13 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tomar otra foto"
+        android:id="@+id/cambiarFoto"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:height="22dp" />
+
 </RelativeLayout>
