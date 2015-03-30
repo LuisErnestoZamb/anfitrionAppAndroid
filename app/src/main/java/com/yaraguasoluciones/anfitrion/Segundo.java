@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -164,12 +163,13 @@ public class Segundo extends ActionBarActivity {
                         .getBitmap(cr, selectedImage);
 
 
-                bitmap.createScaledBitmap(selectedImage, )
+                Bitmap reducido = bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/2, bitmap.getHeight()/2, false);
 
-                imageView.setImageBitmap(bitmap);
+                imageView.setImageBitmap(reducido);
                 Toast.makeText(this, selectedImage.toString(),
                         Toast.LENGTH_LONG).show();
 
+                Log.e("Camera", bitmap.getWidth()+"x"+ bitmap.getHeight());
 
 
 
