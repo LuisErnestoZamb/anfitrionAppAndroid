@@ -36,6 +36,8 @@ public class Segundo extends ActionBarActivity {
     private SharedPreferences mPrefs;
     private String mCurViewMode;
 
+    private static int TAKE_PICTURE = 1;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,18 @@ public class Segundo extends ActionBarActivity {
         takePhoto();
         mPrefs = getSharedPreferences("rutaImagen", MODE_PRIVATE);
 
-
+        Button cancelar = (Button)findViewById(R.id.cambiarFoto);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cedula = (EditText)findViewById(R.id.cedula);
+                cedula.setText("");
+                ImageView mostrar = (ImageView)findViewById(R.id.fotoTomada);
+                mostrar.setImageBitmap(null);
+                mCurViewMode = mPrefs.getString("rutaImagen", null);
+                takePhoto();
+            }
+        });
 
         Button envio = (Button)findViewById(R.id.enviar);
         envio.setOnClickListener(new View.OnClickListener() {
@@ -92,10 +105,6 @@ public class Segundo extends ActionBarActivity {
         });
     }
 
-
-    private static int TAKE_PICTURE = 1;
-    private Uri imageUri;
-
     public void takePhoto() {
         // Generando la ruta de guardado
 
@@ -138,44 +147,10 @@ public class Segundo extends ActionBarActivity {
                 Toast.makeText(this, selectedImage.toString(),
                         Toast.LENGTH_LONG).show();
 
-                Log.e("Camera", bitmap.getWidth()+"x"+ bitmap.getHeight());
-
-
-
-
             } catch (Exception e) {
-                Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT).show();
                 Log.e("Camera", e.toString());
             }
-        }
-
-        if(resultCode == RESULT_OK) {
-
-
-
-
-
-                    /*
-
-            //file path of captured image
-            String filePath = cursor.getString(columnIndex);
-
-
-            //file path of captured image
-            File f = new File(filePath);
-            String filename = f.getName();
-
-            Toast.makeText(contexto, "Your Path:" + filePath, Toast.LENGTH_LONG).show();
-            Toast.makeText(contexto, "Your Filename:" + filename, Toast.LENGTH_LONG).show();
-            cursor.close();
-
-
-
-            mCurViewMode = mPrefs.getString("rutaImagen", filePath);
-
-            */
-
         }else{
             this.finish();
         }
