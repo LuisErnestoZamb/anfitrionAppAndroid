@@ -1,20 +1,27 @@
 package com.yaraguasoluciones.anfitrion;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,6 +33,10 @@ public class Segundo extends ActionBarActivity {
     private Context contexto = null;
     private File archivo = null;
     private EditText cedula = null;
+    private Intent intent = null;
+
+    private SharedPreferences mPrefs;
+    private String mCurViewMode;
 
     private File guardar(Bitmap bm){
         String root = Environment.getExternalStorageDirectory().toString();
@@ -55,8 +66,17 @@ public class Segundo extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_segundo);
 
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePhoto();
+        mPrefs = getSharedPreferences("rutaImagen", MODE_PRIVATE);
+
+/*
+
+        intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, 1);
+ */
+
+
+
 
         Button envio = (Button)findViewById(R.id.enviar);
         envio.setOnClickListener(new View.OnClickListener() {
@@ -79,8 +99,11 @@ public class Segundo extends ActionBarActivity {
                                         dialog.dismiss();
                                         dialog = null;
                                         cedula.setText("");
+                                        ImageView mostrar = (ImageView)findViewById(R.id.fotoTomada);
+                                        mostrar.setImageBitmap(null);
+                                        finish();
+                                        mCurViewMode = mPrefs.getString("rutaImagen", null);
 
-                                        //this.finish();
                                     }
                                 }
                             })
@@ -100,19 +123,109 @@ public class Segundo extends ActionBarActivity {
         });
     }
 
+
+    private static int TAKE_PICTURE = 1;
+    private Uri imageUri;
+
+    public void takePhoto() {
+        // Generando la ruta de guardado
+
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/Anfitrion");
+        myDir.mkdirs();
+        Random generator = new Random();
+        int n = 10000;
+        n = generator.nextInt(n);
+        String fname = "Image-" + n + ".jpg";
+
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        File photo = new File(myDir, fname);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                Uri.fromFile(photo));
+        imageUri = Uri.fromFile(photo);
+        startActivityForResult(intent, TAKE_PICTURE);
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         contexto = this.getApplicationContext();
+
+
+
+        if (resultCode == Activity.RESULT_OK) {
+            Uri selectedImage = imageUri;
+            getContentResolver().notifyChange(selectedImage, null);
+            ImageView imageView = (ImageView) findViewById(R.id.fotoTomada);
+            ContentResolver cr = getContentResolver();
+            Bitmap bitmap;
+            try {
+                bitmap = android.provider.MediaStore.Images.Media
+                        .getBitmap(cr, selectedImage);
+
+
+                bitmap.createScaledBitmap(selectedImage, )
+
+                imageView.setImageBitmap(bitmap);
+                Toast.makeText(this, selectedImage.toString(),
+                        Toast.LENGTH_LONG).show();
+
+
+
+
+
+            } catch (Exception e) {
+                Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT)
+                        .show();
+                Log.e("Camera", e.toString());
+            }
+        }
+
+        if(resultCode == RESULT_OK) {
+
+
+
+
+
+                    /*
+
+            //file path of captured image
+            String filePath = cursor.getString(columnIndex);
+
+
+            //file path of captured image
+            File f = new File(filePath);
+            String filename = f.getName();
+
+            Toast.makeText(contexto, "Your Path:" + filePath, Toast.LENGTH_LONG).show();
+            Toast.makeText(contexto, "Your Filename:" + filename, Toast.LENGTH_LONG).show();
+            cursor.close();
+
+
+
+            mCurViewMode = mPrefs.getString("rutaImagen", filePath);
+
+            */
+
+        }
+
+
+
+
+
+
         if (resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            ImageView mostrar = (ImageView)findViewById(R.id.fotoTomada);
-            mostrar.setImageBitmap(imageBitmap);
-            archivo = guardar(imageBitmap);
+            //Bundle extras = data.getExtras();
+            //Bitmap imageBitmap = (Bitmap) extras.get("data");
+            //ImageView mostrar = (ImageView)findViewById(R.id.fotoTomada);
+            //mostrar.setImageBitmap(imageBitmap);
+            //archivo = guardar(imageBitmap);
         }else{
             this.finish();
         }
+
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     @Override
