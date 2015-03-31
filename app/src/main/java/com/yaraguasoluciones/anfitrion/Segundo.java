@@ -21,8 +21,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 
 public class Segundo extends ActionBarActivity {
@@ -33,7 +38,35 @@ public class Segundo extends ActionBarActivity {
     private static int TAKE_PICTURE = 1;
     private Uri imageUri;
 
-    public static final String PREFS_NAME = "rutaImagen";
+    private static final String PREFS_NAME = "rutaImagen";
+    private String db = "db";
+    private String notasindividuales = "notasindividuales";
+
+    private void anadiendoValor(String valor){
+        // Saving in SharedPreferences -  putStringSet
+        SharedPreferences ss = getSharedPreferences(db, 0);
+        Set<String> hs = ss.getStringSet(notasindividuales, new HashSet<String>());
+        // Adding value from TextEdit
+        hs.add(valor);
+        SharedPreferences.Editor edit = ss.edit();
+        edit.clear();
+        edit.putStringSet(notasindividuales, hs);
+        edit.commit();
+    }
+
+    private String crearJson(String ruta, String tipo, String nac, String cedula, boolean enviado){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("ruta", ruta);
+            object.put("tipo", tipo);
+            object.put("nac", nac);
+            object.put("cedula", cedula);
+            object.put("enviado", enviado);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object.toString();
+    }
 
 
     private void guardarEstado(String pathFile, boolean camara) {
@@ -128,7 +161,11 @@ public class Segundo extends ActionBarActivity {
                                 if (dialog != null) {
                                     Publicar publicar = new Publicar(contexto);
                                     cedula = (EditText) findViewById(R.id.cedula);
-                                    publicar.obtenerCodigo(archivo, cedula.getText().toString(), "V", "1");
+
+                                    anadiendoValor(crearJson(archivo.getAbsolutePath(), "1", "V", cedula.getText().toString(), false));
+                                    // Muestra los mensajes pero no transmite la data.
+                                    // Por tal razón el valor es true en la útima columna.
+                                    publicar.obtenerCodigo(archivo, cedula.getText().toString(), "V", "1", true);
                                     dialog.dismiss();
                                     dialog = null;
                                     cedula.setText("");

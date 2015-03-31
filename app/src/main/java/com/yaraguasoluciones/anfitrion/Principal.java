@@ -1,6 +1,7 @@
 package com.yaraguasoluciones.anfitrion;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -8,6 +9,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import org.json.JSONObject;
+
+import java.io.File;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 
 public class Principal extends ActionBarActivity {
@@ -27,12 +35,55 @@ public class Principal extends ActionBarActivity {
         Log.w("Principal", "onCreate");
     }
 
+    private String db = "db";
+    private String notasindividuales = "notasindividuales";
+
+
+    private void limpiarVector(){
+        // Saving in SharedPreferences -  putStringSet
+        SharedPreferences ss = getSharedPreferences(db, 0);
+        Set<String> hs = ss.getStringSet(notasindividuales, new HashSet<String>());
+        // Adding value from TextEdit
+        //hs.add(valor);
+        SharedPreferences.Editor edit = ss.edit();
+        edit.clear();
+        edit.putStringSet(notasindividuales, hs);
+        edit.commit();
+    }
+
+
+
     @Override
     protected void onResume() {
         super.onResume();
         Log.w("Principal", "onResume");
         //Buscar o subir archivos.
 
+        SharedPreferences ssCopy = getSharedPreferences(db, 0);
+        Set<String> hsCopy = ssCopy.getStringSet(notasindividuales, new HashSet<String>());
+        Iterator iter = hsCopy.iterator();
+
+        while (iter.hasNext()) {
+            try {
+                JSONObject objeto = new JSONObject(iter.next().toString());
+                //Acá subimos archivos.
+                String ruta = objeto.getString("ruta");
+                String tipo = objeto.getString("tipo");
+                String nac = objeto.getString("nac");
+                String cedula = objeto.getString("cedula");
+                boolean enviado = objeto.getBoolean("enviado");
+                Publicar publicar = new Publicar(this.getApplicationContext());
+
+                if (!enviado){
+                    // Se coloca false para no mostrar ningún mensaje y
+                    // para transmitir la data.
+                    publicar.obtenerCodigo(new File(ruta), cedula, nac, tipo, false);
+                }
+
+            } catch (Throwable t) {
+            }
+        }
+        limpiarVector();
     }
 
     @Override
