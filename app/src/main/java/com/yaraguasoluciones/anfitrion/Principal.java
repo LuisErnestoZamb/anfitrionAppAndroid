@@ -66,7 +66,7 @@ public class Principal extends ActionBarActivity {
         Iterator iter = hsCopy.iterator();
         Publicar publicar = new Publicar(this.getApplicationContext());
 
-        while (iter.hasNext()) {
+        while (iter.hasNext() && publicar.verificarConexion()) {
             try {
                 JSONObject objeto = new JSONObject(iter.next().toString());
                 //Acá subimos archivos.
