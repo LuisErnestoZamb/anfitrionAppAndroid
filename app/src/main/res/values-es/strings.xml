@@ -7,5 +7,12 @@
     <string name="botonEnviar">Enviar</string>
     <string name="botonTomarFoto">Tomar foto</string>
     <string name="botonTomarOtraFoto">Tomar otra foto</string>
+    <string name="confirmarTitulo">Enviar imagen</string>
+    <string name="confirmarMensaje">¿Desea continuar?</string>
+    <string name="confirmarAceptar">Aceptar</string>
+    <string name="confirmarCancelar">Cancelar</string>
+    <string name="anuncioConexion">No hay conexión a internet.</string>
+    <string name="anuncioCedula">Error: Cédula incorrecta.</string>
+    <string name="anuncioAdjunto">Imagen adjuntada a: </string>
 
 </resources>

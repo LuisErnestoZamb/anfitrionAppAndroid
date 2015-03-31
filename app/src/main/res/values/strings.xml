@@ -7,5 +7,12 @@
     <string name="botonEnviar">Submit</string>
     <string name="botonTomarFoto">Take picture</string>
     <string name="botonTomarOtraFoto">Take other picture</string>
+    <string name="confirmarTitulo">Send image</string>
+    <string name="confirmarMensaje">Do you want to continue?</string>
+    <string name="confirmarAceptar">Accept</string>
+    <string name="confirmarCancelar">Cancel</string>
+    <string name="anuncioConexion">There is no internet connection.</string>
+    <string name="anuncioCedula">Attention! Invalid ID.</string>
+    <string name="anuncioAdjunto">Picture related with: </string>
 
 </resources>

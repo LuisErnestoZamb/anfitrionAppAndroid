@@ -56,18 +56,18 @@ public class Publicar {
                 public void onCompleted(Exception e, JsonObject result) {
                     if (e != null) {
                        if (mensaje && verificarConexion()) {
-                           Toast.makeText(context, "Cédula incorrecta", Toast.LENGTH_LONG).show();
+                           Toast.makeText(context, context.getText(R.string.anuncioCedula), Toast.LENGTH_LONG).show();
                        }
 
                        if (!verificarConexion()) {
-                           Toast.makeText(context, "No existe conexión a internet.", Toast.LENGTH_LONG).show();
+                           Toast.makeText(context, context.getText(R.string.anuncioConexion), Toast.LENGTH_LONG).show();
                        }
 
 
                         Log.w("enviarArchivo", e.toString());
                     } else if (result != null) {
                         if (mensaje){
-                            Toast.makeText(context, "Imagen adjuntada a: " + result.get("afiliado_ap1") + ", " + result.get("afiliado_no1"), Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, context.getText(R.string.anuncioAdjunto).toString() + result.get("afiliado_ap1") + ", " + result.get("afiliado_no1"), Toast.LENGTH_LONG).show();
                         }else {
                             String afiliado_id = result.get("id").toString();
                             enviarArchivo(nombreArchivo, afiliado_id, optionTipo);

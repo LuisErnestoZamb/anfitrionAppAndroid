@@ -152,10 +152,10 @@ public class Segundo extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog dialog = new AlertDialog.Builder(v.getContext())
-                        .setTitle("Enviar imagen")
-                        .setMessage("Desea continuar con el envío.")
+                        .setTitle(contexto.getText(R.string.confirmarTitulo))
+                        .setMessage(contexto.getText(R.string.confirmarMensaje))
                         .setCancelable(true)
-                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(contexto.getText(R.string.confirmarAceptar), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (dialog != null) {
@@ -189,7 +189,7 @@ public class Segundo extends ActionBarActivity {
                                 }
                             }
                         })
-                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(contexto.getText(R.string.confirmarCancelar), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (dialog != null) {
