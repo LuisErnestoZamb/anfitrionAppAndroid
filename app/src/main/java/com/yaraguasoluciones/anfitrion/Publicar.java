@@ -23,18 +23,23 @@ public class Publicar {
         this.context = context;
     }
 
-    private boolean verificarConexion(){
-        ConnectivityManager cm =
-                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    public boolean verificarConexion(){
+        boolean isConnected = false;
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        //boolean isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+        try{
+            ConnectivityManager cm =
+                    (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            isConnected = activeNetwork != null &&
+                    activeNetwork.isConnectedOrConnecting();
+            //boolean isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+
+        }catch (Exception e){
+
+        }
         return isConnected;
     }
-
-
 
     public void obtenerCodigo(final File nombreArchivo, final String cedula, final String nac,final String optionTipo, final boolean mensaje) {
     /*
@@ -50,9 +55,15 @@ public class Publicar {
                 @Override
                 public void onCompleted(Exception e, JsonObject result) {
                     if (e != null) {
-                       if (mensaje) {
+                       if (mensaje && verificarConexion()) {
                            Toast.makeText(context, "Cédula incorrecta", Toast.LENGTH_LONG).show();
                        }
+
+                       if (!verificarConexion()) {
+                           Toast.makeText(context, "No existe conexión a internet.", Toast.LENGTH_LONG).show();
+                       }
+
+
                         Log.w("enviarArchivo", e.toString());
                     } else if (result != null) {
                         if (mensaje){

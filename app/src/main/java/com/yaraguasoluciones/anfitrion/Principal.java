@@ -46,10 +46,10 @@ public class Principal extends ActionBarActivity {
         // Adding value from TextEdit
         //hs.add(valor);
         // Remove objects from key.
-        hs.remove(notasindividuales);
+        hs.clear();
         SharedPreferences.Editor edit = ss.edit();
         edit.clear();
-        edit.putStringSet(notasindividuales, hs);
+        //edit.putStringSet(notasindividuales, hs);
         edit.commit();
     }
 
@@ -64,6 +64,7 @@ public class Principal extends ActionBarActivity {
         SharedPreferences ssCopy = getSharedPreferences(db, 0);
         Set<String> hsCopy = ssCopy.getStringSet(notasindividuales, new HashSet<String>());
         Iterator iter = hsCopy.iterator();
+        Publicar publicar = new Publicar(this.getApplicationContext());
 
         while (iter.hasNext()) {
             try {
@@ -79,14 +80,17 @@ public class Principal extends ActionBarActivity {
                 if (!enviado){
                     // Se coloca false para no mostrar ningún mensaje y
                     // para transmitir la data.
-                    Publicar publicar = new Publicar(this.getApplicationContext());
+                    Log.w("transmision------->", "inicioObjeto");
                     publicar.obtenerCodigo(new File(ruta), cedula, nac, tipo, false);
+                    Log.w("transmision------->", "finObjeto");
                 }
 
             } catch (Throwable t) {
             }
         }
-        limpiarVector();
+        if (publicar.verificarConexion()) {
+            limpiarVector();
+        }
     }
 
     @Override

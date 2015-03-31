@@ -25,6 +25,10 @@ uses-permission#android.permission.INTERNET
 ADDED from AndroidManifest.xml:7:5
 	android:name
 		ADDED from AndroidManifest.xml:7:22
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from AndroidManifest.xml:8:5
+	android:name
+		ADDED from AndroidManifest.xml:8:22
 uses-permission#android.permission.CAMERA
 ADDED from AndroidManifest.xml:9:5
 	android:name

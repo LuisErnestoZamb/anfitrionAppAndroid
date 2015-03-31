@@ -162,10 +162,23 @@ public class Segundo extends ActionBarActivity {
                                     Publicar publicar = new Publicar(contexto);
                                     cedula = (EditText) findViewById(R.id.cedula);
 
-                                    anadiendoValor(crearJson(archivo.getAbsolutePath(), "1", "V", cedula.getText().toString(), false));
+
                                     // Muestra los mensajes pero no transmite la data.
                                     // Por tal razón el valor es true en la útima columna.
                                     publicar.obtenerCodigo(archivo, cedula.getText().toString(), "V", "1", true);
+
+                                    //Verificamos si existe conexión
+                                    //Añadimos o ponemos en cola la foto.
+
+                                    if (publicar.verificarConexion()) {
+                                        //Publicacion directa
+                                        publicar.obtenerCodigo(archivo, cedula.getText().toString(), "V", "1", false);
+                                    } else {
+                                        //Poner en cola
+                                        anadiendoValor(crearJson(archivo.getAbsolutePath(), "1", "V", cedula.getText().toString(), false));
+                                    }
+
+
                                     dialog.dismiss();
                                     dialog = null;
                                     cedula.setText("");
