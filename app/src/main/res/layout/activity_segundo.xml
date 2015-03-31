@@ -1,20 +1,43 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.yaraguasoluciones.anfitrion.Segundo">
 
 
-    <fragment
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:name="com.yaraguasoluciones.anfitrion.Proceso"
-        android:id="@+id/fragment"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        tools:layout="@layout/fragment_proceso" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberSigned"
+            android:ems="10"
+            android:id="@+id/cedula"
+            android:layout_weight="1" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enviar"
+            android:id="@+id/enviar" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="380dp"
+        android:id="@+id/fotoTomada"
+        android:layout_gravity="center_horizontal|bottom"
+        android:contentDescription="No foto"
+        android:layout_above="@+id/cambiarFoto" />
+
 
     <Button
         android:layout_width="match_parent"
@@ -22,6 +45,5 @@
         android:text="Tomar otra foto"
         android:id="@+id/cambiarFoto"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:height="22dp" />
-</RelativeLayout>
+        android:layout_centerHorizontal="true" />
+</LinearLayout>

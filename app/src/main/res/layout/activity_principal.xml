@@ -26,9 +26,7 @@
         android:height="100dp"
         android:autoText="true"
         android:text="Haga clic en el botón tomar foto para ingresar la imagen relacionada al afiliado."
-        android:textAlignment="center"
         android:textSize="16dp"
         android:textStyle="bold" />
-
 
 </RelativeLayout>

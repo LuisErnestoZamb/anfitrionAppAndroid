@@ -20,7 +20,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.Random;
@@ -79,10 +78,10 @@ public class Segundo extends ActionBarActivity {
             // Acá reducimos el tamaño de la imagen.
             Bitmap reducido = bitmap.createScaledBitmap(bitmap, bitmap.getWidth() / 2, bitmap.getHeight() / 2, false);
             imageView.setImageBitmap(reducido);
-            Toast.makeText(this, selectedImage.toString(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, selectedImage.toString(), Toast.LENGTH_LONG).show();
 
         } catch (Exception e) {
-            Log.e("Camera", e.toString());
+            Log.w("Camera", e.toString());
         }
     }
 
@@ -119,44 +118,42 @@ public class Segundo extends ActionBarActivity {
         envio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (contexto != null) {
-
-
-                    AlertDialog dialog = new AlertDialog.Builder(v.getContext())
-                            .setTitle("Enviar imagen")
-                            .setMessage("Desea continuar con el envío.")
-                            .setCancelable(true)
-                            .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if (dialog != null) {
-                                        Publicar publicar = new Publicar(contexto);
-                                        cedula = (EditText) findViewById(R.id.cedula);
-                                        publicar.obtenerCodigo(archivo, cedula.getText().toString(), "V", "1");
-                                        dialog.dismiss();
-                                        dialog = null;
-                                        cedula.setText("");
-                                        ImageView mostrar = (ImageView) findViewById(R.id.fotoTomada);
-                                        mostrar.setImageBitmap(null);
-                                        guardarEstado(null, false);
-                                        finish();
-                                    }
+                AlertDialog dialog = new AlertDialog.Builder(v.getContext())
+                        .setTitle("Enviar imagen")
+                        .setMessage("Desea continuar con el envío.")
+                        .setCancelable(true)
+                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (dialog != null) {
+                                    Publicar publicar = new Publicar(contexto);
+                                    cedula = (EditText) findViewById(R.id.cedula);
+                                    publicar.obtenerCodigo(archivo, cedula.getText().toString(), "V", "1");
+                                    dialog.dismiss();
+                                    dialog = null;
+                                    cedula.setText("");
+                                    ImageView mostrar = (ImageView) findViewById(R.id.fotoTomada);
+                                    mostrar.setImageBitmap(null);
+                                    guardarEstado(null, false);
+                                    finish();
                                 }
-                            })
-                            .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if (dialog != null) {
-                                        dialog.cancel();
-                                        dialog = null;
-                                    }
+                            }
+                        })
+                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (dialog != null) {
+                                    dialog.cancel();
+                                    dialog = null;
                                 }
-                            })
-                            .create();
-                    dialog.show();
+                            }
+                        })
+                        .create();
+                dialog.show();
 
-                }
             }
+
+
         });
 
     }

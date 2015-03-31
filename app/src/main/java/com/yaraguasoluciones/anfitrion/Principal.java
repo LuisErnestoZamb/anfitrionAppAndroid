@@ -3,6 +3,7 @@ package com.yaraguasoluciones.anfitrion;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,8 +24,16 @@ public class Principal extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+        Log.w("Principal", "onCreate");
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.w("Principal", "onResume");
+        //Buscar o subir archivos.
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
