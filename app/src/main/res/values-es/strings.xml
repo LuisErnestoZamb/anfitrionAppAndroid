@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Anfitrión</string>
+    <string name="action_settings">Settings</string>
+    <string name="mensajeAyuda">Haga clic en el botón "Tomar foto" para ingresar la imagen relacionada al afiliado.</string>
+    <string name="mensajeDeIdentificacion">Ingrese la cédula del afiliado y presione "Enviar".</string>
+    <string name="botonEnviar">Enviar</string>
+    <string name="botonTomarFoto">Tomar foto</string>
+    <string name="botonTomarOtraFoto">Tomar otra foto</string>
+
+</resources>

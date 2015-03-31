@@ -8,6 +8,13 @@
     tools:context="com.yaraguasoluciones.anfitrion.Segundo">
 
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/mensaje"
+        android:text="@string/mensajeDeIdentificacion"
+        android:textSize="16dp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -25,7 +32,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enviar"
+            android:text="@string/botonEnviar"
             android:id="@+id/enviar" />
 
     </LinearLayout>
@@ -35,14 +42,13 @@
         android:layout_height="380dp"
         android:id="@+id/fotoTomada"
         android:layout_gravity="center_horizontal|bottom"
-        android:contentDescription="No foto"
         android:layout_above="@+id/cambiarFoto" />
 
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Tomar otra foto"
+        android:text="@string/botonTomarOtraFoto"
         android:id="@+id/cambiarFoto"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />

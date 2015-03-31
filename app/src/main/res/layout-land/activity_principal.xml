@@ -8,34 +8,23 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tomar foto"
+        android:text="@string/botonTomarFoto"
         android:id="@+id/tomarFoto"
         android:height="100dp"
         android:textSize="16dp"
         android:width="200dp"
-        android:layout_above="@+id/foto"
+        android:layout_centerVertical="true"
         android:layout_alignParentEnd="true" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/foto"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:maxWidth="200dp"
-        android:maxHeight="100dp"
-        android:minHeight="100dp"
-        android:minWidth="200dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/mensaje"
         android:width="300dp"
-        android:height="100dp"
         android:autoText="true"
-        android:text="Haga clic en el botón tomar foto para ingresar la imagen relacionada al afiliado."
-        android:layout_above="@+id/foto"
+        android:textSize="28dp"
+        android:text="@string/mensajeAyuda"
+        android:layout_centerVertical="true"
         android:layout_alignParentStart="true" />
 
 

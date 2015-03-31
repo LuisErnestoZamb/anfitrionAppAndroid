@@ -1,10 +1,11 @@
+
 <resources>
     <string name="app_name">Anfitrión</string>
-
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_segundo">Anfitrión</string>
+    <string name="mensajeAyuda">Press the button "Take picture" to capture the image relate to the member.</string>
+    <string name="mensajeDeIdentificacion">Fill the field with your ID and press "Submit".</string>
+    <string name="botonEnviar">Submit</string>
+    <string name="botonTomarFoto">Take picture</string>
+    <string name="botonTomarOtraFoto">Take other picture</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
