@@ -45,6 +45,8 @@ public class Principal extends ActionBarActivity {
         Set<String> hs = ss.getStringSet(notasindividuales, new HashSet<String>());
         // Adding value from TextEdit
         //hs.add(valor);
+        // Remove objects from key.
+        hs.remove(notasindividuales);
         SharedPreferences.Editor edit = ss.edit();
         edit.clear();
         edit.putStringSet(notasindividuales, hs);
@@ -72,11 +74,12 @@ public class Principal extends ActionBarActivity {
                 String nac = objeto.getString("nac");
                 String cedula = objeto.getString("cedula");
                 boolean enviado = objeto.getBoolean("enviado");
-                Publicar publicar = new Publicar(this.getApplicationContext());
+                Log.w("valorJSONObject", iter.next().toString());
 
                 if (!enviado){
                     // Se coloca false para no mostrar ningún mensaje y
                     // para transmitir la data.
+                    Publicar publicar = new Publicar(this.getApplicationContext());
                     publicar.obtenerCodigo(new File(ruta), cedula, nac, tipo, false);
                 }
 
