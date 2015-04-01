@@ -1,10 +1,3 @@
-<!--
-This code is property of:
-Este código es propiedad de:
-Yaragua soluciones para la web c.a.
-http://www.yaragua.com.ve
-
--->
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yaraguasoluciones.anfitrion" >
@@ -42,3 +35,10 @@ http://www.yaragua.com.ve
     </application>
 
 </manifest>
+    <!--
+    This code is property of:
+    Este código es propiedad de:
+    Yaragua soluciones para la web c.a.
+    http://www.yaragua.com.ve
+
+    -->

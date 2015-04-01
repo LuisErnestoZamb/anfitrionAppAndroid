@@ -1,10 +1,3 @@
-<!--
-This code is property of:
-Este código es propiedad de:
-Yaragua soluciones para la web c.a.
-http://www.yaragua.com.ve
-
--->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -60,3 +53,10 @@ http://www.yaragua.com.ve
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 </LinearLayout>
+    <!--
+    This code is property of:
+    Este código es propiedad de:
+    Yaragua soluciones para la web c.a.
+    http://www.yaragua.com.ve
+
+    -->

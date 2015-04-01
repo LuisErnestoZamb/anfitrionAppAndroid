@@ -1,11 +1,3 @@
-<!--
-This code is property of:
-Este código es propiedad de:
-Yaragua soluciones para la web c.a.
-http://www.yaragua.com.ve
-
--->
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -36,3 +28,10 @@ http://www.yaragua.com.ve
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
+    <!--
+This code is property of:
+Este código es propiedad de:
+Yaragua soluciones para la web c.a.
+http://www.yaragua.com.ve
+
+-->
