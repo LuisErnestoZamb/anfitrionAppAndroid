@@ -4,3 +4,10 @@
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>
+    <!--
+    This code is property of:
+    Este código es propiedad de:
+    Yaragua soluciones para la web c.a.
+    http://www.yaragua.com.ve
+
+    -->

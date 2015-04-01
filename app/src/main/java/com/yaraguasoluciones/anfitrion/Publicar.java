@@ -1,3 +1,9 @@
+/*
+This code is property of:
+Este código es propiedad de:
+Yaragua soluciones para la web c.a.
+http://www.yaragua.com.ve
+*/
 package com.yaraguasoluciones.anfitrion;
 
 import android.content.Context;
