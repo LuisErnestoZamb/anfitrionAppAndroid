@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Anfitrion.iml" filepath="$PROJECT_DIR$/Anfitrion.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/anfitrionAppAndroid.iml" filepath="$PROJECT_DIR$/anfitrionAppAndroid.iml" />
     </modules>
   </component>
 </project>
-
